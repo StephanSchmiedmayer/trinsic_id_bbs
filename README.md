@@ -21,14 +21,14 @@ let data = [
 ];
 
 // generate a random key
-let sk = SecretKey::random();
+let sk = SecretKey::random::<Bls12381Sha256>();
 let pk = sk.public_key();
 
 // sign the messages
 let signature = bbs.sign(&sk, &data);
 
 // verify the signature
-let res = bbs.verify(&pk, &data, &signature);
+let res = bbs.verify(&pk, &signature, &data);
 
 // create a proof by disclosing the messages at indices 1 and 3
 let proof = bbs.create_proof(&pk, &signature, &data, &[1, 3]).unwrap();
@@ -36,5 +36,5 @@ let proof = bbs.create_proof(&pk, &signature, &data, &[1, 3]).unwrap();
 let disclosed_data = [data[1], data[3]];
 
 // verify the generated proof
-let res = bbs.verify_proof(&pk, &proof, data.len(), &disclosed_data, &[1, 3]);
+let res = bbs.verify_proof(&pk, &proof, &disclosed_data, &[1, 3]);
 ```
